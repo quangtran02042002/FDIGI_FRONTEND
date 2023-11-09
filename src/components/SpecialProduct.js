@@ -28,7 +28,7 @@ const SpectialProduct = (props) => {
                             <span className="red-p">${price}</span> &nbsp;
                             {/* <strike>$50</strike> */}
                         </p>
-                        <div className="discount-till d-flex align-items-center gap-10">
+                        {/* <div className="discount-till d-flex align-items-center gap-10">
                             <p className="mb-0">
                                 <b>5 </b>days
                             </p>
@@ -37,7 +37,7 @@ const SpectialProduct = (props) => {
                                 <span className="badge rounded-circle p-3 bg-danger">1</span>:
                                 <span className="badge rounded-circle p-3 bg-danger">1</span>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="prod-count my-3">
                             <p>Product: {quantity}</p>
                             <div className="progress">
