@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { getAProduct } from '../features/products/productSlice';
+import { getUserCart } from '../features/user/userSlice';
 
 
 
@@ -18,6 +19,23 @@ const Header = () => {
   const [paginate, setPaginate] = useState(true);
   const navigate = useNavigate()
   const [total, setTotal] = useState(null)
+
+  const getTokenFromLocalStorage = localStorage.getItem("customer")
+        ? JSON.parse(localStorage.getItem("customer"))
+        : null;
+
+    const config2 = {
+        headers: {
+            Authorization: `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+                }`,
+            Accept: "application/json",
+        },
+    };
+
+    useEffect(() => {
+      dispatch(getUserCart(config2))
+    }, [])
+
   useEffect(() => {
     let sum = 0;
     for (let index = 0; index < cartState?.length; index++) {

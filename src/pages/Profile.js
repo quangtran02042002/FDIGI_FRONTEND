@@ -6,7 +6,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateProfile } from '../features/user/userSlice'
-import {FiEdit} from "react-icons/fi"
+import { FiEdit } from "react-icons/fi"
 
 const profileSchema = Yup.object({
     firstname: Yup.string().required("First Name is Required"),
@@ -15,9 +15,22 @@ const profileSchema = Yup.object({
     mobile: Yup.string().required("Mobile No is Required"),
 });
 
+
+
 const Profile = () => {
+    const getTokenFromLocalStorage = localStorage.getItem("customer")
+        ? JSON.parse(localStorage.getItem("customer"))
+        : null;
+
+    const config2 = {
+        headers: {
+            Authorization: `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+                }`,
+            Accept: "application/json",
+        },
+    };
     const dispatch = useDispatch()
-    const userState = useSelector(state =>state?.auth?.user)
+    const userState = useSelector(state => state?.auth?.user)
     const [edit, setEdit] = useState(true)
 
     const formik = useFormik({
@@ -30,7 +43,7 @@ const Profile = () => {
         },
         validationSchema: profileSchema,
         onSubmit: (values) => {
-            dispatch(updateProfile(values))
+            dispatch(updateProfile({ data: values, config2: config2 }))
             setEdit(true)
         },
     });
@@ -42,7 +55,7 @@ const Profile = () => {
                     <div className='col-12'>
                         <div className='d-flex justify-content-between align-items-center'>
                             <h3 className='my-3'>Update Profile</h3>
-                            <FiEdit className="fs-3" onClick={() =>setEdit(false)} />
+                            <FiEdit className="fs-3" onClick={() => setEdit(false)} />
                         </div>
                     </div>
                     <div className='col-12'>
@@ -54,12 +67,12 @@ const Profile = () => {
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="example2" className="form-label">Last Name</label>
-                                <input type="text" name='lastname' disabled={edit} className="form-control" id="example2" value={formik.values.lastname} onChange={formik.handleChange('lastname')} onBlur={formik.handleBlur('lastname')}/>
+                                <input type="text" name='lastname' disabled={edit} className="form-control" id="example2" value={formik.values.lastname} onChange={formik.handleChange('lastname')} onBlur={formik.handleBlur('lastname')} />
                                 <div className='error'>{formik.touched.lastname && formik.errors.lastname}</div>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-                                <input type="email" name='email' disabled={edit} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={formik.values.email} onChange={formik.handleChange('email')} onBlur={formik.handleBlur('email')}/>
+                                <input type="email" name='email' disabled={edit} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={formik.values.email} onChange={formik.handleChange('email')} onBlur={formik.handleBlur('email')} />
                                 <div className='error'>{formik.touched.email && formik.errors.email}</div>
                             </div>
                             <div className="mb-3">
@@ -68,10 +81,10 @@ const Profile = () => {
                                 <div className='error'>{formik.touched.mobile && formik.errors.mobile}</div>
                             </div>
 
-                        {
-                            edit===false &&    <button type="submit" className="btn btn-primary">Save</button>
+                            {
+                                edit === false && <button type="submit" className="btn btn-primary">Save</button>
 
-                        }
+                            }
                         </form>
                     </div>
                 </div>
